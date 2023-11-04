@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

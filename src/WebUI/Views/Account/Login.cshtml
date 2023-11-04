@@ -1,0 +1,39 @@
+@model WebUI.Models.LoginViewModel;
+
+<form asp-action="Login" method="post">
+    <div class="form-group">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" autocomplete="username" aria-required="true"
+            placeholder="name@example.com" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Password" class="form-label">Password</label>
+        <input asp-for="Password" class="form-control" autocomplete="current-password" aria-required="true"
+            placeholder="password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="RememberMe" class="form-check-input" />
+        <label class="form-check-label" asp-for="RememberMe">Remember me</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+
+    <div>
+        <p>
+            <!-- Facebook Login Button -->
+            <a asp-controller="Account" asp-action="ExternalLogin" asp-route-provider="Facebook">Log in with
+                Facebook</a>
+        </p>
+    </div>
+
+
+    <div>
+        <p>
+            <a asp-controller="Password" asp-action="ForgotPassword">Forgot Password</a>
+        </p>
+    </div>
+</form>

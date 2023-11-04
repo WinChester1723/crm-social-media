@@ -1,0 +1,15 @@
+@model IEnumerable<WebUI.Models.InstagramPostViewModel>
+
+<h2>Instagram Posts</h2>
+
+@foreach (var post in Model)
+{
+    <div class="instagram-post">
+        <img src="@post.ImageUrl" alt="Post image" />
+        <p>@post.Caption</p>
+        <p>Date: @post.Date</p>
+        <p>Likes: @post.LikesCount</p>
+        <p>Comments: @post.CommentsCount</p>
+        <a asp-action="InstagramPostComments" asp-route-id="@post.Id">Manage Comments</a>
+    </div>
+}

@@ -1,0 +1,12 @@
+@model WebUI.Models.InstagramPostCommentsViewModel
+
+<h2>Comments for Post: @Model.Post.Caption</h2>
+
+@foreach (var comment in Model.Comments)
+{
+    <div class="instagram-comment">
+        <p>@comment.Author: @comment.Text</p>
+        <p>@comment.Date</p>
+        <a asp-action="DeleteInstagramComment" asp-route-id="@comment.Id">Delete Comment</a>
+    </div>
+}

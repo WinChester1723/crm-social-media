@@ -1,0 +1,17 @@
+@model IEnumerable<WebUI.Models.FacebookPostViewModel>
+
+<h2>Facebook Posts</h2>
+
+@foreach (var post in Model)
+{
+    <div class="facebook-post">
+        <p>@post.Text</p>
+        @if (!string.IsNullOrEmpty(post.ImageUrl))
+        {
+            <img src="@post.ImageUrl" alt="Post image" />
+        }
+        <p>Likes: @post.LikesCount</p>
+        <p>Comments: @post.CommentsCount</p>
+        <a asp-action="FacebookPostComments" asp-route-id="@post.Id">Manage Comments</a>
+    </div>
+}

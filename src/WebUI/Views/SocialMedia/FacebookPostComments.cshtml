@@ -1,0 +1,12 @@
+@model WebUI.Models.FacebookPostCommentsViewModel
+
+<h2>Comments for Post: @Model.Post.Text</h2>
+
+@foreach (var comment in Model.Comments)
+{
+    <div class="facebook-comment">
+        <p>@comment.Author: @comment.Text</p>
+        <p>@comment.Date</p>
+        <a asp-action="DeleteComment" asp-route-id="@comment.Id">Delete Comment</a>
+    </div>
+}
