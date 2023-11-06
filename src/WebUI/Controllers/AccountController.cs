@@ -1,3 +1,7 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Models;
 
@@ -5,7 +9,19 @@ namespace WebUI.Controllers
 {
     public class AccountController : Controller
     {
+
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+        {
+            _signInManager = signInManager;
+            _userManager = userManager;
+        }
+
+
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
@@ -140,6 +156,63 @@ namespace WebUI.Controllers
             }
 
             return View(model);
+        }
+
+
+        public IActionResult FacebookLogin(string returnUrl = null)
+        {
+            var redirectUrl = Url.Action("FacebookResponse", "Account", new { ReturnUrl = returnUrl });
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties("Facebook", redirectUrl);
+            return Challenge(properties, FacebookDefaults.AuthenticationScheme);
+        }
+
+        public async Task<IActionResult> FacebookResponse(string returnUrl = null)
+        {
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            // Логика пост-аутентификации (например, связывание аккаунта Facebook с локальным аккаунтом)
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            if (result.Succeeded)
+            {
+                // Успешный вход, перенаправляем пользователя
+                return RedirectToLocal(returnUrl);
+            }
+            else
+            {
+                // Если пользователь не найден, можно предложить ему создать новый аккаунт
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                var user = new IdentityUser { UserName = email, Email = email };
+                var createResult = await _userManager.CreateAsync(user);
+                if (createResult.Succeeded)
+                {
+                    await _userManager.AddLoginAsync(user, info);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToLocal(returnUrl);
+                }
+                else
+                {
+                    // Обработка ошибок при создании аккаунта
+                }
+            }
+            return RedirectToAction(nameof(Login));
+        }
+
+
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
         }
 
 

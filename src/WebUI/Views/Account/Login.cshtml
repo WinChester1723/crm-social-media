@@ -25,7 +25,7 @@
     <div>
         <p>
             <!-- Facebook Login Button -->
-            <a asp-controller="Account" asp-action="ExternalLogin" asp-route-provider="Facebook">Log in with
+            <a asp-controller="Account" asp-action="FacebookLogin" class="btn btn-primary">Login with
                 Facebook</a>
         </p>
     </div>
@@ -33,7 +33,7 @@
 
     <div>
         <p>
-            <a asp-controller="Password" asp-action="ForgotPassword">Forgot Password</a>
+            <a asp-controller="Account" asp-action="ForgotPassword">Forgot Password</a>
         </p>
     </div>
 </form>

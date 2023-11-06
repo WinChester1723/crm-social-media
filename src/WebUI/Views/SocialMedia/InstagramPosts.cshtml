@@ -1,8 +1,8 @@
-@model IEnumerable<WebUI.Models.InstagramPostViewModel>
+@model WebUI.Models.InstagramPostsViewModel
 
 <h2>Instagram Posts</h2>
 
-@foreach (var post in Model)
+@foreach (var post in Model.Posts)
 {
     <div class="instagram-post">
         <img src="@post.ImageUrl" alt="Post image" />
@@ -12,4 +12,26 @@
         <p>Comments: @post.CommentsCount</p>
         <a asp-action="InstagramPostComments" asp-route-id="@post.Id">Manage Comments</a>
     </div>
+}
+
+@if (Model.Pagination.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            <li class="page-item @(Model.Pagination.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link" asp-action="FacebookPosts"
+                    asp-route-page="@(Model.Pagination.CurrentPage - 1)">Previous</a>
+            </li>
+            @for (int i = 1; i <= Model.Pagination.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.Pagination.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-action="FacebookPosts" asp-route-page="@i">@i</a>
+                </li>
+            }
+            <li class="page-item @(Model.Pagination.HasNextPage ? "" : "disabled")">
+                <a class="page-link" asp-action="FacebookPosts"
+                    asp-route-page="@(Model.Pagination.CurrentPage + 1)">Next</a>
+            </li>
+        </ul>
+    </nav>
 }

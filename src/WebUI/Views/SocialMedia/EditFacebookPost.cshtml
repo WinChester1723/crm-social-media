@@ -1,0 +1,14 @@
+@model WebUI.Models.FacebookPostViewModel
+
+<h2>Edit Post</h2>
+
+<form asp-action="EditPost" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="Text"></label>
+        <textarea asp-for="Text" class="form-control"></textarea>
+        <span asp-validation-for="Text" class="text-danger"></span>
+    </div>
+    <!-- Добавьте другие поля, если необходимо -->
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

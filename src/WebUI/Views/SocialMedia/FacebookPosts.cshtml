@@ -1,8 +1,8 @@
-@model IEnumerable<WebUI.Models.FacebookPostViewModel>
+@model WebUI.Models.FacebookPostsViewModel
 
 <h2>Facebook Posts</h2>
 
-@foreach (var post in Model)
+@foreach (var post in Model.Posts)
 {
     <div class="facebook-post">
         <p>@post.Text</p>
@@ -13,5 +13,36 @@
         <p>Likes: @post.LikesCount</p>
         <p>Comments: @post.CommentsCount</p>
         <a asp-action="FacebookPostComments" asp-route-id="@post.Id">Manage Comments</a>
+        <a asp-action="EditPost" asp-route-id="@post.Id" class="btn btn-secondary">Edit</a>
+        @* <a asp-action="DeletePost" asp-route-id="@post.Id" class="btn btn-danger">Delete</a> *@
+        <a href="javascript:;" onclick="confirmDeletion('@post.Id', '@Url.Action("DeletePost")')"
+            class="btn btn-danger">Delete</a>
+
     </div>
+}
+
+@if (Model.Pagination.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            <li class="page-item @(Model.Pagination.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link" asp-action="FacebookPosts"
+                    asp-route-page="@(Model.Pagination.CurrentPage - 1)">Previous</a>
+            </li>
+            @for (int i = 1; i <= Model.Pagination.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.Pagination.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-action="FacebookPosts" asp-route-page="@i">@i</a>
+                </li>
+            }
+            <li class="page-item @(Model.Pagination.HasNextPage ? "" : "disabled")">
+                <a class="page-link" asp-action="FacebookPosts"
+                    asp-route-page="@(Model.Pagination.CurrentPage + 1)">Next</a>
+            </li>
+        </ul>
+    </nav>
+}
+
+@section Scripts {
+    <script src="~/js/site.js"></script>
 }

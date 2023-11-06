@@ -11,17 +11,73 @@ public class SocialMediaController : Controller
     private readonly ILogger<SocialMediaController> _logger;
 
     [HttpGet]
-    public IActionResult FacebookPosts()
+    public IActionResult FacebookPosts(int page = 1)
     {
-        // Заглушка: получение списка постов пользователя в Facebook
-        // В реальном приложении здесь будет код, получающий данные из Facebook API или базы данных
+        // // Заглушка: получение списка постов пользователя в Facebook
+        // // В реальном приложении здесь будет код, получающий данные из Facebook API или базы данных
+        // var posts = new List<FacebookPostViewModel>
+        // {
+        //     new FacebookPostViewModel { Id = 1, Text = "Hello, world!", LikesCount = 5, CommentsCount = 2 },
+        //     // Добавьте больше постов для демонстрации
+        // };
+
+        // return View(posts);
+
+        int pageSize = 10; // Количество постов на одной странице
+                           // Заглушка: получение списка постов пользователя в Facebook
+                           // В реальном приложении здесь будет код, получающий данные из Facebook API или базы данных
         var posts = new List<FacebookPostViewModel>
+    {
+        new FacebookPostViewModel { Id = 1, Text = "Hello, world!", LikesCount = 5, CommentsCount = 2 },
+        // Добавьте больше постов для демонстрации
+    };
+
+        int totalPosts = posts.Count;
+        var currentPagePosts = posts.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        var paginationModel = new PaginationViewModel(totalPosts, page, pageSize);
+
+        var viewModel = new FacebookPostsViewModel
         {
-            new FacebookPostViewModel { Id = 1, Text = "Hello, world!", LikesCount = 5, CommentsCount = 2 },
-            // Добавьте больше постов для демонстрации
+            Posts = currentPagePosts,
+            Pagination = paginationModel
         };
 
-        return View(posts);
+        return View(viewModel);
+    }
+
+    [HttpGet]
+    public IActionResult EditPost(int id)
+    {
+        // Заглушка: получение данных поста по ID
+        // В реальном приложении здесь будет код, получающий данные из базы данных или API
+        var post = new FacebookPostViewModel { Id = id, Text = "Existing post content" };
+        return View(post);
+    }
+
+    [HttpPost]
+    public IActionResult EditPost(FacebookPostViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            // Заглушка: сохранение изменений в посте
+            // В реальном приложении здесь будет код, обновляющий данные в базе данных или через API
+            TempData["Message"] = "Post has been updated successfully.";
+            return RedirectToAction("Posts");
+        }
+        return View(model);
+    }
+
+    [HttpPost]
+    public IActionResult DeletePost(int id)
+    {
+        // Заглушка: логика удаления поста с идентификатором id
+        // В реальном приложении здесь будет код, удаляющий пост из базы данных или через API социальной сети
+
+        // Временно: просто возвращаем подтверждение об удалении
+        TempData["Message"] = "Post has been deleted successfully.";
+
+        // Перенаправляем обратно на страницу со списком постов
+        return RedirectToAction("FacebookPosts");
     }
 
     [HttpGet]
@@ -63,17 +119,38 @@ public class SocialMediaController : Controller
 
 
     [HttpGet]
-    public IActionResult InstagramPosts()
+    public IActionResult InstagramPosts(int page = 1)
     {
-        // Заглушка: получение списка постов пользователя в Instagram
-        // В реальном приложении здесь будет код, получающий данные из Instagram API или базы данных
+        //     // Заглушка: получение списка постов пользователя в Instagram
+        //     // В реальном приложении здесь будет код, получающий данные из Instagram API или базы данных
+        //     var posts = new List<InstagramPostViewModel>
+        // {
+        //     new InstagramPostViewModel { Id = 1, Caption = "Beautiful sunset!", LikesCount = 10, CommentsCount = 3, Date = DateTime.Now, ImageUrl = "url_to_image" },
+        //     // Добавьте больше постов для демонстрации
+        // };
+
+        //     return View(posts);
+
+        int pageSize = 10; // Количество постов на одной странице
+                           // Заглушка: получение списка постов пользователя в Instagram
+                           // В реальном приложении здесь будет код, получающий данные из Instagram API или базы данных
         var posts = new List<InstagramPostViewModel>
     {
-        new InstagramPostViewModel { Id = 1, Caption = "Beautiful sunset!", LikesCount = 10, CommentsCount = 3, Date = DateTime.Now, ImageUrl = "url_to_image" },
+        new InstagramPostViewModel { Id = 1, Caption = "Hello, world!", LikesCount = 5, CommentsCount = 2 },
         // Добавьте больше постов для демонстрации
     };
 
-        return View(posts);
+        int totalPosts = posts.Count;
+        var currentPagePosts = posts.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        var paginationModel = new PaginationViewModel(totalPosts, page, pageSize);
+
+        var viewModel = new InstagramPostsViewModel
+        {
+            Posts = currentPagePosts,
+            Pagination = paginationModel
+        };
+
+        return View(viewModel);
     }
 
 
