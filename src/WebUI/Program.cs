@@ -11,11 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-                builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -30,8 +26,8 @@ builder.Services.AddAuthentication(options =>
     .AddCookie()
     .AddFacebook(facebookOptions =>
     {
-        facebookOptions.AppId = "";
-        facebookOptions.AppSecret = "";
+        facebookOptions.AppId = "273440645462157";
+        facebookOptions.AppSecret = "f11df6f4fd5a1651e1c94fd713b2f6d7";
         // Укажите здесь необходимые области доступа и настройки
     });
 
